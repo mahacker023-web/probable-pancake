@@ -1,0 +1,27 @@
+name: Compile MalikLang Engine
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Setup MSVC Compiler
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Compile Code to Windows EXE
+      run: |
+        cl.exe /EHsc uicompiler.cpp /Fe:MalikLangStudio.exe user32.lib gdi32.lib gdi32.lib comctl32.lib
+
+    - name: Upload Software Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: MalikLangUI-Executable
+        path: MalikLangStudio.exe
